@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jaxcode.github.io/"/>
-  <updated>2017-04-13T13:36:51.921Z</updated>
+  <updated>2017-04-13T14:03:18.700Z</updated>
   <id>http://jaxcode.github.io/</id>
   
   <author>
@@ -20,9 +20,10 @@
     <link href="http://jaxcode.github.io/2017/04/13/%E6%88%91%E7%9A%84chrome%E6%8F%92%E4%BB%B6%E9%9B%86/"/>
     <id>http://jaxcode.github.io/2017/04/13/我的chrome插件集/</id>
     <published>2017-04-13T11:59:57.000Z</published>
-    <updated>2017-04-13T13:36:51.921Z</updated>
+    <updated>2017-04-13T14:03:18.700Z</updated>
     
     <content type="html"><![CDATA[<p>chrome 浏览器是 google 公司开发的。正如它官网的介绍一样，快速、免费、安全、占内存。无论你是不是苦逼的程序员，你都应该试试它。</p>
+<a id="more"></a>
 <h3 id="chrome-浏览器下载"><a href="#chrome-浏览器下载" class="headerlink" title="chrome 浏览器下载"></a>chrome 浏览器下载</h3><p>你可以选择从chrome浏览器的官网进行下载： <a href="http://www.google.cn/chrome/browser/desktop/index.html" target="_blank" rel="external">chrome 官网地址</a></p>
 <p>但如果不翻墙的话，可能会安装失败，推荐下载国内镜像：<a href="http://www.chromeliulanqi.com/" target="_blank" rel="external">chrome 镜像地址</a></p>
 <h3 id="chrome-应用商店"><a href="#chrome-应用商店" class="headerlink" title="chrome 应用商店"></a>chrome 应用商店</h3><p>chrome 应用商店提供免费的浏览器的应用和插件：<a href="https://chrome.google.com/webstore/category/extensions?hl=zh-CN" target="_blank" rel="external">应用商店地址</a></p>
@@ -58,7 +59,6 @@
     <summary type="html">
     
       &lt;p&gt;chrome 浏览器是 google 公司开发的。正如它官网的介绍一样，快速、免费、安全、占内存。无论你是不是苦逼的程序员，你都应该试试它。&lt;/p&gt;
-&lt;h3 id=&quot;chrome-浏览器下载&quot;&gt;&lt;a href=&quot;#chrome-浏览器下载&quot; class=&quot;headerlin
     
     </summary>
     
