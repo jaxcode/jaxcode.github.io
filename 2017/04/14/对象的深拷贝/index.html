@@ -1,28 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Jax Blog</title>
-  
-  <link href="/atom.xml" rel="self"/>
-  
-  <link href="http://jaxcode.github.io/"/>
-  <updated>2017-04-15T06:01:39.071Z</updated>
-  <id>http://jaxcode.github.io/</id>
-  
-  <author>
-    <name>Jax</name>
-    
-  </author>
-  
-  <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>对象的深拷贝</title>
-    <link href="http://jaxcode.github.io/2017/04/14/%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%B7%B1%E6%8B%B7%E8%B4%9D/"/>
-    <id>http://jaxcode.github.io/2017/04/14/对象的深拷贝/</id>
-    <published>2017-04-14T13:26:21.000Z</published>
-    <updated>2017-04-15T06:01:39.071Z</updated>
-    
-    <content type="html"><![CDATA[<p>了解对象的深拷贝之前，我们需要知道对象的拷贝和普通的拷贝有什么不同。<br><a id="more"></a></p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 对象的深拷贝 · Jax Blog</title><meta name="description" content="对象的深拷贝 - Jax"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jaxcode.github.io/atom.xml" title="Jax Blog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jaxcode" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">对象的深拷贝</h1><div class="post-info">Apr 14, 2017</div><div class="post-content"><p>了解对象的深拷贝之前，我们需要知道对象的拷贝和普通的拷贝有什么不同。<br><a id="more"></a></p>
 <h3 id="数据类型的不同"><a href="#数据类型的不同" class="headerlink" title="数据类型的不同"></a>数据类型的不同</h3><p>js根据数据类型的不同可以分为：基础数据类型和引用数据类型。</p>
 <p>基础数据类型包括：<code>number</code> <code>string</code> <code>null</code> <code>undefined</code> <code>boolean</code>。引用数据类型包括：<code>array</code> <code>object</code>。</p>
 <p>基础数据类型并不存在深拷贝的问题，来看看他们的区别：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 基础类型</span></div><div class="line"><span class="keyword">var</span> str1 = <span class="string">'aaa'</span>;</div><div class="line"><span class="keyword">var</span> str2 = str1;</div><div class="line">str2 = <span class="string">'bbb'</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(str1 === str2); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(str1, str2); <span class="comment">// aaa bbb</span></div><div class="line"></div><div class="line"><span class="comment">// 引用类型</span></div><div class="line"><span class="keyword">var</span> obj1 = &#123; <span class="attr">name</span>: <span class="string">'jax'</span> &#125;;</div><div class="line"><span class="keyword">var</span> obj2 = obj1;</div><div class="line">obj2.name = <span class="string">'leo'</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(obj1 === obj2); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(obj1); <span class="comment">// &#123;name: "leo"&#125;</span></div><div class="line"><span class="built_in">console</span>.log(obj2); <span class="comment">// &#123;name: "leo"&#125;</span></div></pre></td></tr></table></figure></p>
@@ -51,65 +27,4 @@
 <p>使用类型判断函数来实现深拷贝函数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> t = type(obj);</div><div class="line">    <span class="keyword">if</span> (t === <span class="string">'array'</span>) &#123;</div><div class="line">        <span class="keyword">var</span> res = [];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; obj.length; i++) &#123;</div><div class="line">            res.push(deepCopy(obj[i]));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (t === <span class="string">'object'</span>) &#123;</div><div class="line">        <span class="keyword">var</span> res = &#123;&#125;;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</div><div class="line">            res[key] = deepCopy(obj[key]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> obj;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">type</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> res = <span class="built_in">Object</span>.prototype.toString.call(obj);</div><div class="line">    res = res.replace(<span class="regexp">/\[object (.+?)\]/i</span>, <span class="string">'$1'</span>).toLowerCase();</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>在实际的工作项目中，并不见得说一定要使用深拷贝。还是要具体情况具体分析。</p>
 <p>嗯。就这样。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;了解对象的深拷贝之前，我们需要知道对象的拷贝和普通的拷贝有什么不同。&lt;br&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>我的 chrome 插件集</title>
-    <link href="http://jaxcode.github.io/2017/04/13/%E6%88%91%E7%9A%84chrome%E6%8F%92%E4%BB%B6%E9%9B%86/"/>
-    <id>http://jaxcode.github.io/2017/04/13/我的chrome插件集/</id>
-    <published>2017-04-13T11:59:57.000Z</published>
-    <updated>2017-04-13T14:03:18.700Z</updated>
-    
-    <content type="html"><![CDATA[<p>chrome 浏览器是 google 公司开发的。正如它官网的介绍一样，快速、免费、安全、占内存。无论你是不是苦逼的程序员，你都应该试试它。</p>
-<a id="more"></a>
-<h3 id="chrome-浏览器下载"><a href="#chrome-浏览器下载" class="headerlink" title="chrome 浏览器下载"></a>chrome 浏览器下载</h3><p>你可以选择从chrome浏览器的官网进行下载： <a href="http://www.google.cn/chrome/browser/desktop/index.html" target="_blank" rel="external">chrome 官网地址</a></p>
-<p>但如果不翻墙的话，可能会安装失败，推荐下载国内镜像：<a href="http://www.chromeliulanqi.com/" target="_blank" rel="external">chrome 镜像地址</a></p>
-<h3 id="chrome-应用商店"><a href="#chrome-应用商店" class="headerlink" title="chrome 应用商店"></a>chrome 应用商店</h3><p>chrome 应用商店提供免费的浏览器的应用和插件：<a href="https://chrome.google.com/webstore/category/extensions?hl=zh-CN" target="_blank" rel="external">应用商店地址</a></p>
-<p>如果你无法打开应用商店的话，可能你需要一个翻墙工具：<a href="https://github.com/getlantern/forum" target="_blank" rel="external">下载 Lantern （蓝灯）</a></p>
-<p>当然，Lantern 只能提供有限的免费流量，不过下载一些插件应该是够用的了。</p>
-<h3 id="插件列表"><a href="#插件列表" class="headerlink" title="插件列表"></a>插件列表</h3><p><a href="https://chrome.google.com/webstore/detail/extension-manager/gjldcdngmdknpinoemndlidpcabkggco" target="_blank" rel="external">Extension Manager</a>：用这个插件管理其他插件</p>
-<p><a href="https://chrome.google.com/webstore/detail/clean-crxmouse-gestures/mjidkpedjlfnanainpdfnedkdlacidla" target="_blank" rel="external">CLEAN crxMouse Gestures</a>：鼠标手势，超级拖拽</p>
-<p><a href="https://chrome.google.com/webstore/detail/adfreeplayeronline/gnpjhfjhgfkohgdklomfbjmnchpenngp" target="_blank" rel="external">ADfree.Player.Online</a>：屏蔽国内视频网站的广告</p>
-<p><a href="https://chrome.google.com/webstore/detail/adblock-plus/cfhdojbkjhnklbpkdaibdccddilifddb" target="_blank" rel="external">Adblock Plus</a>：拦截页面上的广告</p>
-<p><a href="https://chrome.google.com/webstore/detail/lastpass-free-password-ma/hdokiejnpimakedhajhdlcegeplioahd" target="_blank" rel="external">LastPass</a>：更好的账号密码管理</p>
-<p><a href="https://chrome.google.com/webstore/detail/better-history/obciceimmggglbmelaidpjlmodcebijb" target="_blank" rel="external">Better History</a>：更好的历史记录管理</p>
-<p><a href="https://chrome.google.com/webstore/detail/chrono-download-manager/mciiogijehkdemklbdcbfkefimifhecn" target="_blank" rel="external">chrono</a>：更好的下载管理</p>
-<p><a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a>：更好的标签页管理（节约内存）</p>
-<p><a href="https://chrome.google.com/webstore/detail/anoelogknphkblfagnpdmpfpaddikbae" target="_blank" rel="external">PIP Video</a>：弹出视频播放窗口</p>
-<p><a href="https://chrome.google.com/webstore/detail/the-great-suspender/klbibkeccnjlkjkiokjodocebajanakg" target="_blank" rel="external">The Great Suspender</a>：挂起未使用的标签</p>
-<p><a href="https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb" target="_blank" rel="external">Vimium</a>：解放鼠标，用键盘来操作你的页面</p>
-<p><a href="https://chrome.google.com/webstore/detail/take-webpage-screenshots/mcbpblocgmgfnpjjppndjkmgjaogfceg" target="_blank" rel="external">FireShot</a>：网页截图工具</p>
-<p><a href="https://chrome.google.com/webstore/detail/pakku/jklfcpboamajpiikgkbjcnnnnooefbhh" target="_blank" rel="external">pakku</a>：合并b站的刷屏弹幕</p>
-<p><a href="https://chrome.google.com/webstore/detail/fastube-faster-youtube/mhkojhcnbjmmecmhbjnobopbbplmhfme" target="_blank" rel="external">FasTube</a>：如果你上YouTube的话</p>
-<p><a href="https://chrome.google.com/webstore/detail/%E7%82%BA%E4%BB%80%E9%BA%BC%E4%BD%A0%E5%80%91%E5%B0%B1%E6%98%AF%E4%B8%8D%E8%83%BD%E5%8A%A0%E5%80%8B%E7%A9%BA%E6%A0%BC%E5%91%A2%EF%BC%9F/paphcfdffjnbcgkokihcdjliihicmbpd" target="_blank" rel="external">空格之神</a>：如果你是强迫症的话</p>
-<h3 id="前端插件"><a href="#前端插件" class="headerlink" title="前端插件"></a>前端插件</h3><p><a href="https://chrome.google.com/webstore/detail/lomkpheldlbkkfiifcbfifipaofnmnkn" target="_blank" rel="external">Code Cola</a>：可视化编辑页面的css样式</p>
-<p><a href="https://userstyles.org/" target="_blank" rel="external">Stylish</a>：为任意网站自定义主题</p>
-<p><a href="https://www.baidufe.com/fehelper" target="_blank" rel="external">FeHelper</a>：提供了许多实用的前端小工具</p>
-<p><a href="https://chrome.google.com/webstore/detail/page-ruler/jlpkojjdgbllmedoapgfodplfhcbnbpn" target="_blank" rel="external">Page Ruler</a>：测量页面上的元素尺寸</p>
-<p><a href="https://github.com/buunguyen/octotree" target="_blank" rel="external">Octotree</a>：在github上生成项目目录树</p>
-<p><a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei" target="_blank" rel="external">LiveReload</a>：配合编辑器实现页面自动刷新</p>
-<p><a href="http://www.editthiscookie.com/" target="_blank" rel="external">EditThisCookie</a>：cookie管理器</p>
-<p><a href="https://wappalyzer.com/" target="_blank" rel="external">Wappalyzer</a>：识别网站用到的web技术</p>
-<p><a href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop" target="_blank" rel="external">Postman</a>：模拟http请求</p>
-<p><a href="https://chrome.google.com/webstore/detail/colorzilla/bhlhnicpbhignbdhedgjhgdocnmhomnp" target="_blank" rel="external">ColorZilla</a>：页面取色器</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;chrome 浏览器是 google 公司开发的。正如它官网的介绍一样，快速、免费、安全、占内存。无论你是不是苦逼的程序员，你都应该试试它。&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-</feed>
+</div></article></div></main><footer><div class="paginator"><a href="/2017/04/13/我的chrome插件集/" class="prev">PREV</a></div><div class="copyright"><p>© 2017 <a href="http://jaxcode.github.io">Jax</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p><script src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async="async"></script></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
