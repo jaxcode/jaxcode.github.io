@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jaxcode.github.io/"/>
-  <updated>2017-04-15T06:01:39.071Z</updated>
+  <updated>2017-04-17T05:03:36.362Z</updated>
   <id>http://jaxcode.github.io/</id>
   
   <author>
@@ -14,6 +14,220 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>this指向总结</title>
+    <link href="http://jaxcode.github.io/2017/04/17/this%E6%8C%87%E5%90%91%E6%80%BB%E7%BB%93/"/>
+    <id>http://jaxcode.github.io/2017/04/17/this指向总结/</id>
+    <published>2017-04-17T03:53:05.000Z</published>
+    <updated>2017-04-17T05:03:36.362Z</updated>
+    
+    <content type="html"><![CDATA[<p>在学习js的过程中, 关于this的指向你一定听过这么一句话. 谁调用的, this就指向谁. 但这句话并不准确.</p>
+<a id="more"></a>
+<h3 id="this的基础概念"><a href="#this的基础概念" class="headerlink" title="this的基础概念"></a>this的基础概念</h3><p><code>this</code>的指向, 是在被调用的时候确定的. 调用的方式不同, <code>this</code>指向不同.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">a</span>: <span class="number">2</span> &#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.a);</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn(); <span class="comment">// 直接调用 // 1</span></div><div class="line">fn.call(obj); <span class="comment">// 绑定obj调用 // 2</span></div></pre></td></tr></table></figure></p>
+<h3 id="全局对象的this指向"><a href="#全局对象的this指向" class="headerlink" title="全局对象的this指向"></a>全局对象的this指向</h3><p>全局对象的<code>this</code>指向他的自身 (浏览器端是<code>window</code>, node中是<code>global</code>)<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.a = <span class="number">1</span>;</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 1</span></div></pre></td></tr></table></figure></p>
+<p>在全局环境中, 声明一个变量, 变量指向自身.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>; <span class="comment">// 显示</span></div><div class="line">b = <span class="number">2</span>; <span class="comment">// 隐式</span></div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 2</span></div></pre></td></tr></table></figure></p>
+<div class="tip"><br>在没有通过<code>var</code>声明的情况下直接赋值, 会把变量隐式绑定到全局对象中, 这是不推荐的.<br></div>
+
+
+<h3 id="函数中的this指向"><a href="#函数中的this指向" class="headerlink" title="函数中的this指向"></a>函数中的this指向</h3><ol>
+<li><p>函数的<code>this</code>指向, 由调用函数的方式决定.</p>
+</li>
+<li><p>如果调用者函数被一个对象所拥有, <code>this</code>指向该对象.</p>
+</li>
+<li><p>如果函数独立调用, 严格模式中, this指向<code>undefined</code>.</p>
+</li>
+<li><p>在非严格模式中, 当<code>this</code>指向<code>undefined</code>时, 会自动指向全局对象.</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 非严格模式</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">2</span>,</div><div class="line">    <span class="attr">fn</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.a;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(obj.fn()); <span class="comment">// 2</span></div><div class="line"><span class="comment">// 此时调用者函数被对象拥有, this指向对象</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> fn = obj.fn;</div><div class="line"><span class="built_in">console</span>.log(fn()); <span class="comment">// 1</span></div><div class="line"><span class="comment">// 此时函数为独立调用, this指向undefined, 在非严格模式下, 自动指向全局对象</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 严格模式</span></div><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">2</span>,</div><div class="line">    <span class="attr">fn</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.a;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(obj.fn()); <span class="comment">// 2</span></div><div class="line"><span class="comment">// 此时调用者函数被对象拥有, this指向对象</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> fn = obj.fn;</div><div class="line"><span class="built_in">console</span>.log(fn()); <span class="comment">// 报错</span></div><div class="line"><span class="comment">// 此时函数为独立调用, this指向undefined</span></div></pre></td></tr></table></figure>
+<h3 id="对象中的this指向"><a href="#对象中的this指向" class="headerlink" title="对象中的this指向"></a>对象中的this指向</h3><ol>
+<li><p>当对象在全局声明时, this指向全局对象.</p>
+</li>
+<li><p>当对象在函数中声明时, 严格模式中, this指向<code>undefined</code>.</p>
+</li>
+<li><p>在非严格模式中, 当<code>this</code>指向<code>undefined</code>时, 会自动指向全局对象.</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 全局声明, this指向全局</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">2</span>,</div><div class="line">    <span class="attr">b</span>: <span class="keyword">this</span>.a + <span class="number">10</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(obj.b); <span class="comment">// 11</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 非严格模式</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">2</span>;</div><div class="line">    <span class="keyword">var</span> obj = &#123;</div><div class="line">        <span class="attr">b</span>: <span class="keyword">this</span>.a + <span class="number">10</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> obj.b;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(fn()); <span class="comment">// 11</span></div><div class="line"><span class="comment">// 对象在函数中声明, this指向undefined, 在非严格模式下, 自动指向全局对象</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 严格模式</span></div><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">2</span>;</div><div class="line">    <span class="keyword">var</span> obj = &#123;</div><div class="line">        <span class="attr">b</span>: <span class="keyword">this</span>.a + <span class="number">10</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> obj.b;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(fn()); <span class="comment">// 报错</span></div><div class="line"><span class="comment">// 对象在函数中声明, this指向undefined</span></div></pre></td></tr></table></figure>
+<h3 id="构造函数的this指向"><a href="#构造函数的this指向" class="headerlink" title="构造函数的this指向"></a>构造函数的this指向</h3><ol>
+<li><p>当做构造函数来调用时, <code>this</code>指向调用时实例化出来的对象.</p>
+</li>
+<li><p>当做普通函数执行, <code>this</code>指向的判断与上文提到的函数<code>this</code>指向判断方法相同.</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> jax = <span class="keyword">new</span> Person(<span class="string">'jax'</span>);</div><div class="line"><span class="built_in">console</span>.log(jax.name); <span class="comment">// jax</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 当做普通函数执行</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// window</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> jax = Person(<span class="string">'jax'</span>);</div></pre></td></tr></table></figure>
+<div class="tip"><br>如果在构造函数中返回了一个对象, 那么<code>this</code>会指向返回的对象.<br></div>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">name</span>: <span class="string">'leo'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> jax = <span class="keyword">new</span> Person(<span class="string">'jax'</span>);</div><div class="line"><span class="built_in">console</span>.log(jax.name); <span class="comment">// leo</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在学习js的过程中, 关于this的指向你一定听过这么一句话. 谁调用的, this就指向谁. 但这句话并不准确.&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>完整的AJAX流程</title>
+    <link href="http://jaxcode.github.io/2017/04/15/%E5%AE%8C%E6%95%B4%E7%9A%84AJAX%E6%B5%81%E7%A8%8B/"/>
+    <id>http://jaxcode.github.io/2017/04/15/完整的AJAX流程/</id>
+    <published>2017-04-15T14:15:16.000Z</published>
+    <updated>2017-04-17T06:34:43.204Z</updated>
+    
+    <content type="html"><![CDATA[<p>AJAX代表异步js和XML. 它使用<code>XMLHttpRequest</code>对象与服务器端脚本进行通信, 来达到发送和接受数据的目的. 由于<code>异步</code>特性, AJAX无需重新加载页面就可以做所有的事情.<br><a id="more"></a></p>
+<h3 id="发送请求的方法"><a href="#发送请求的方法" class="headerlink" title="发送请求的方法"></a>发送请求的方法</h3><p><code>XMLHttpRequest</code>是AJAX的核心. 我们需要获得这个类的实例来进行AJAX操作. <code>XMLHttpRequest</code>在低版本的IE浏览器中存在兼容问题, 需要通过其他对象来创建AJAX请求实例, 但出于安全性的考虑. 并不建议这么做.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"><span class="keyword">if</span> (!xhr) &#123;</div><div class="line">    alert(<span class="string">'你的浏览器不支持AJAX!'</span>);</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'你的浏览器不支持AJAX!'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>open()</code>方法: 初始化一个请求. 常用的参数有三个:</p>
+<ul>
+<li>method: 发送请求的HTTP方法, 如<code>GET</code>, <code>POST</code>, <code>DELETE</code>等.</li>
+<li>url: 请求访问的URL地址.</li>
+<li>async: 是否执行异步操作, 默认值为true(异步).</li>
+</ul>
+<p><code>send()</code>方法: 发送请求.</p>
+<ul>
+<li>send()方法的参数可以是任何发送到服务器的数据.</li>
+</ul>
+<h3 id="GET请求的实例"><a href="#GET请求的实例" class="headerlink" title="GET请求的实例"></a>GET请求的实例</h3><p>get方式的请求, 需要把传递的参数写在请求地址后面.</p>
+<p>完整格式: <a href="http://url?key1=value1&amp;key2=value2" target="_blank" rel="external">http://url?key1=value1&amp;key2=value2</a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">xhr.open(<span class="string">'GET'</span>, <span class="string">'http://localhost/php/index.php?name=jax'</span>);</div><div class="line">xhr.send(<span class="literal">null</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="POST请求的实例"><a href="#POST请求的实例" class="headerlink" title="POST请求的实例"></a>POST请求的实例</h3><p>post方式的请求, 需要把参数写在<code>send()</code>方法里.</p>
+<p>值得注意的是, 当我们发送<code>POST</code>请求的时候. 我们必须要在调用<code>send()</code>方法之前设置请求的<code>MIME</code>类型. 我们可以通过<code>setRequestHeader()</code>设置这个请求的头信息.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">xhr.open(<span class="string">'POST'</span>, <span class="string">'http://localhost/php/index.php'</span>);</div><div class="line">xhr.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/x-www-form-urlencoded'</span>);</div><div class="line">xhr.send(<span class="string">'name=jax'</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="请求的状态"><a href="#请求的状态" class="headerlink" title="请求的状态"></a>请求的状态</h3><p>AJAX调用过程中的状态被记录在<code>readyState</code>属性中. 它是只读属性, 共有5种状态值.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">值</th>
+<th style="text-align:center">状态</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">UNSENT</td>
+<td style="text-align:center">open()方法还未被调用</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">OPENED</td>
+<td style="text-align:center">send()方法还未被调用</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">HEADERS_RECEIVED</td>
+<td style="text-align:center">send()方法已调用, 已接收到响应头和响应状态</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">LOADING</td>
+<td style="text-align:center">已接收到响应数据, 但内容不全</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">DONE</td>
+<td style="text-align:center">已接收到完整的响应数据, 请求完毕</td>
+</tr>
+</tbody>
+</table>
+<p>我们可以通过<code>onreadystatechange</code>函数来监控<code>readyState</code>属性的变化. <code>readyState</code>属性的每一次变化, 都会调用这个函数. 它接受一个回调函数作为参数.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line"></div><div class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(xhr.readyState);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhr.open(<span class="string">'GET'</span>, <span class="string">'http://localhost/php/index.php?name=jax'</span>);</div><div class="line">xhr.send(<span class="literal">null</span>);</div><div class="line"></div><div class="line"><span class="comment">// 依次打印 1, 2, 3, 4</span></div><div class="line"><span class="comment">// 因为是变化时打印, 所以不会打印0</span></div></pre></td></tr></table></figure></p>
+<h3 id="响应的准备工作"><a href="#响应的准备工作" class="headerlink" title="响应的准备工作"></a>响应的准备工作</h3><p><code>status</code>属性记录了响应的状态码, 如果服务器没有显式的指定状态码. 则设置为默认值, 即200.</p>
+<p>在处理响应数据之前, 我们先应该保证:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">readyState === <span class="number">4</span>, 即已接收到全部的响应数据.</div><div class="line">status === <span class="number">20</span>X, 即Http状态为ok.</div></pre></td></tr></table></figure>
+<h3 id="接受响应的数据"><a href="#接受响应的数据" class="headerlink" title="接受响应的数据"></a>接受响应的数据</h3><p><code>responseText</code>属性表示服务器响应内容的文本形式.</p>
+<p><code>responseXML</code>属性表示服务器响应内容的XML形式.</p>
+<p>此时, 我们就可以完成一个从发送数据到接收数据的完整实例.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span> &amp;&amp; xhr.status === <span class="number">200</span>) &#123;</div><div class="line">        <span class="built_in">console</span>.log(xhr.responseText); <span class="comment">// jax</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">xhr.open(<span class="string">'GET'</span>, <span class="string">'http://localhost/php/index.php?name=jax'</span>);</div><div class="line">xhr.send(<span class="literal">null</span>);</div></pre></td></tr></table></figure></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="comment">// index.php</span></div><div class="line">    $name = (<span class="keyword">isset</span>($_GET[<span class="string">'name'</span>])) ? $_GET[<span class="string">'name'</span>] : <span class="string">'no name'</span>;</div><div class="line">    <span class="keyword">echo</span> $name;</div></pre></td></tr></table></figure>
+<h3 id="XHR1和XHR2"><a href="#XHR1和XHR2" class="headerlink" title="XHR1和XHR2"></a>XHR1和XHR2</h3><p><code>XHR1</code>表示<code>XMLHttpRequest Level 1</code>, 上文的实例使用<code>XHR1</code>就可以完成. 但是它有以下的缺点:</p>
+<ul>
+<li>只支持文本数据传输, 不支持二进制数据.</li>
+<li>传输数据时, 无法获得传输进度信息.</li>
+<li>受浏览器<code>同源策略</code>限制, 只能请求同源资源.</li>
+<li>没有超时机制.</li>
+</ul>
+<p><code>XHR2</code>表示<code>XMLHttpRequest Level 2</code>, 它做了以下的改进:</p>
+<ul>
+<li>支持二进制数据</li>
+<li>支持文件的上传和表单管理</li>
+<li>提供了进度提示的方法</li>
+<li>提供了跨域请求的实现方案</li>
+<li>可以设置请求超时市场和超时后续处理</li>
+</ul>
+<div class="tip"><br>同源策略是由Netscape提出的一个安全策略, 所有支持js的浏览器都使用这个策略, 所谓同源, 指的是域名, 协议, 端口相同. 如果非同源, 在请求数据时, 浏览器会拒绝执行并报出异常.<br></div>
+
+<h3 id="XMLHttpRequest-属性方法列表"><a href="#XMLHttpRequest-属性方法列表" class="headerlink" title="XMLHttpRequest 属性方法列表"></a>XMLHttpRequest 属性方法列表</h3><h4 id="属性"><a href="#属性" class="headerlink" title="属性:"></a>属性:</h4><p><code>onreadystatechange</code>: 当<code>readyState</code>属性变化时调用.</p>
+<p><code>readyState</code>: 请求的五种状态.</p>
+<p><code>status</code>: 该请求响应的状态码.</p>
+<p><code>statusText</code>: 该请求响应的状态信息.</p>
+<p><code>upload</code>: 可以在<code>upload</code>上添加一个事件监听来跟踪上传过程.</p>
+<p><code>withCredentials</code>: 表明在进行跨站的访问控制请求时, 是否使用认证信息. 默认为<code>false</code>.</p>
+<p><code>response</code>: 响应的实体, 类型由<code>responseType</code>决定, 如果请求未完成或失败, 该值为<code>null</code>,</p>
+<p><code>responseText</code>: 本次请求响应的是文本. 如果请求未完成或失败, 该值为<code>null</code>,</p>
+<p><code>responseXML</code>: 本次请求响应的是一个<code>document</code>对象. 请求未发送, 请求未成功, 请求无法解析为XML或HTML时, 该值为<code>null</code>.</p>
+<p><code>responseType</code>: 设置该值来改变响应类型, 告诉服务器你期望的响应格式.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">responseType可设置的值</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">“”(空字符串)</td>
+<td style="text-align:center">字符串(默认值)</td>
+</tr>
+<tr>
+<td style="text-align:center">text</td>
+<td style="text-align:center">字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">arraybuffer</td>
+<td style="text-align:center">二进制数据缓冲区</td>
+</tr>
+<tr>
+<td style="text-align:center">blog</td>
+<td style="text-align:center">类似文件对象</td>
+</tr>
+<tr>
+<td style="text-align:center">document</td>
+<td style="text-align:center">网页</td>
+</tr>
+<tr>
+<td style="text-align:center">json</td>
+<td style="text-align:center">解析服务器传递来的JSON字符串</td>
+</tr>
+</tbody>
+</table>
+<p><code>onabort</code>: 当请求失败时调用该方法.</p>
+<p><code>onerror</code>: 当请求发生错误时调用该方法.</p>
+<p><code>onload</code>: 当一个HTTP请求正确加载出内容后返回时调用.</p>
+<p><code>onloadstart</code>: 当一个HTTP请求开始加载数据时调用.</p>
+<p><code>onprogress</code>: 间歇调用该方法用来获取请求过程中的信息.</p>
+<p><code>ontimeout</code>: 当时间超时时调用; 只有通过设置XMLHttpRequest对象的timeout属性来发生超时时, 这种情况才会发生,</p>
+<p><code>onloadend</code>: 当内容加载完成，不管失败与否，都会调用该方法.</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法:"></a>方法:</h4><p><code>abort()</code>: 如果请求已经被发送,则立刻中止请求.</p>
+<p><code>getAllResponseHeaders()</code>: 返回所有的响应头信息, 如果还没接收, 则返回<code>null</code>.</p>
+<p><code>getResponseHeader()</code>: 返回指定的响应头信息, 如果还没接收, 或不存在, 则返回<code>null</code>.</p>
+<p><code>open()</code>: 初始化一个请求.</p>
+<p><code>send()</code>: 发送请求.</p>
+<p><code>overrideMimeType()</code>: 重写由服务器返回的<code>MIME type</code>.</p>
+<p><code>setRequestHeader()</code>: 给指定的HTTP请求头赋值.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;AJAX代表异步js和XML. 它使用&lt;code&gt;XMLHttpRequest&lt;/code&gt;对象与服务器端脚本进行通信, 来达到发送和接受数据的目的. 由于&lt;code&gt;异步&lt;/code&gt;特性, AJAX无需重新加载页面就可以做所有的事情.&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>对象的深拷贝</title>
